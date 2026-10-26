@@ -1,0 +1,21 @@
+# [DORMANT - TEAM MODE]
+# 激活方式：取消以下每行行首的 `# ` 前缀，并把 @TBD 换成真实 GitHub username
+# （GitHub 用户名的 `@` 是格式的一部分，如 `@alice-dev`）。
+# 参见 templates/DORMANT-SWITCHES-TEMPLATE.md 第 2 项。
+#
+# CODEOWNERS 语义：每行匹配一条路径；同一文件可被多行匹配，最后匹配到者优先。
+# 全部行以 `#` 开头时，GitHub 视为空文件（不阻塞 PR，也不请求 review），
+# 因此 SOLO 模式保持全部注释即等价于未启用。
+#
+# 建议的通用目录划分：src/ backend/ frontend/ docs/ scripts/ tests/ infra/
+# 按项目实际结构增删。全部为通用占位，不含任何项目专属路径。
+#
+# *                       @TBD
+# /src/                   @TBD
+# /backend/               @TBD
+# /frontend/              @TBD
+# /docs/                  @TBD
+# /scripts/               @TBD
+# /tests/                 @TBD
+# /infra/                 @TBD
+# /.github/               @TBD

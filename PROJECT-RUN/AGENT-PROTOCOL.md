@@ -81,6 +81,10 @@
 
 **done-when**：目标 commit 已进 `origin/main` 且 CI 绿。
 
+<!-- 双模执行层 -->
+**[SOLO]** 直推 main（本地四步全绿 + 自审清单通过后）；Agent 可互审。
+**[TEAM]** 必须走 PR + CODEOWNERS 审查 + ≥1 人类审批；Agent 产出需人类在 PR 描述声明「已人工复核关键逻辑」。
+
 ## P3 · 变更评审
 
 **进入条件**：PR 打开 或 子智能体产出待审
@@ -103,6 +107,10 @@
 
 **done-when**：PR merged，所有 Critical/High resolved，ADR 涉及决策已入 `docs/architecture/decisions/`。
 
+<!-- 双模执行层 -->
+**[SOLO]** 直推 main（本地四步全绿 + 自审清单通过后）；Agent 可互审。
+**[TEAM]** 必须走 PR + CODEOWNERS 审查 + ≥1 人类审批；Agent 产出需人类在 PR 描述声明「已人工复核关键逻辑」。
+
 ## P4 · 发版
 
 **进入条件**：待发布特性集齐，CHANGELOG 已更新，本地全绿
@@ -118,6 +126,10 @@
 7. §6.3-S7 验收：装包 / 冒烟 / 更新 latest.yml。
 
 **done-when**：`git tag --list v*` 包含新版本，release artifacts 可下载，验收清单全勾。
+
+<!-- 双模执行层 -->
+**[SOLO]** 直推 main（本地四步全绿 + 自审清单通过后）；Agent 可互审。
+**[TEAM]** 必须走 PR + CODEOWNERS 审查 + ≥1 人类审批；Agent 产出需人类在 PR 描述声明「已人工复核关键逻辑」；发布轮值执行、技术 Owner 保留最终解释权。
 
 ## P5 · 运维与换版
 
@@ -135,6 +147,10 @@
    验证：旧 tag 镜像仍可拉取。
 
 **done-when**：三件事（镜像/文档/备份）当日完成，回退路径可执行。
+
+<!-- 双模执行层 -->
+**[SOLO]** 直推 main（本地四步全绿 + 自审清单通过后）；Agent 可互审。
+**[TEAM]** 必须走 PR + CODEOWNERS 审查 + ≥1 人类审批；Agent 产出需人类在 PR 描述声明「已人工复核关键逻辑」；发布轮值负责备份与回退路径验证。
 
 ## P6 · 事故处置
 

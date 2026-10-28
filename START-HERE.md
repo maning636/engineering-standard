@@ -22,7 +22,9 @@
 | **从零建一个新项目** | `PROJECT-RUN/AGENT-BOOTSTRAP.md`（填变量 → 先出计划 → 等人审） | `PROJECT-RUN/checklist.md`、`PROJECT-RUN/AGENT-PROTOCOL.md` P0/P1 |
 | **给现有项目加功能** | `PROJECT-RUN/AGENT-PROTOCOL.md` P2 | `PROJECT-RUN/CRAFTS/TDD.md`、`PROJECT-RUN/CRAFTS/REVIEW.md` |
 | **做设计 / 技术选型** | `PROJECT-RUN/CRAFTS/DESIGN.md` | `PROJECT-RUN/ARCH-PATTERNS.md`、`PROJECT-RUN/templates/ADR-TEMPLATE.md` |
-| **发版 / 打包 / 上线** | `PROJECT-RUN/RELEASE.md` | `PROJECT-RUN/templates/DEPLOY/`（规划中） |
+| **发版 / 打包 / 上线** | `PROJECT-RUN/RELEASE.md` | `PROJECT-RUN/templates/DEPLOY/` |
+| **要配置反向代理 / 部署到服务器** | `PROJECT-RUN/RELEASE.md` §5 | `PROJECT-RUN/templates/DEPLOY/` |
+| **给一个项目立规矩（AGENT.md）** | `PROJECT-RUN/templates/PROJECT-AGENT.md` | `PROJECT-RUN/AGENT-PROTOCOL.md` 红线 |
 | **做注册码 / 授权 / 后台服务** | `PROJECT-RUN/LICENSING.md` | `PROJECT-RUN/templates/LICENSING/` |
 | **派小模型子智能体干活** | `PROJECT-RUN/AGENT-DISPATCH.md` | — |
 | **单人 ↔ 团队切换** | `PROJECT-RUN/DUAL-MODE.md` | `PROJECT-RUN/templates/DORMANT-SWITCHES-TEMPLATE.md` |

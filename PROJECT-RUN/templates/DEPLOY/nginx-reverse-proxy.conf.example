@@ -1,0 +1,77 @@
+# ============================================================
+# nginx 反向代理配置示例（可修改）
+# 用途：单产品挂在主站 /app/ 子路径下。
+# 说明：端口 8093、路径 /opt/app/... 均为示例值，请按实际环境修改。
+# ============================================================
+
+server {
+    listen 80;
+    server_name _;            # 示例占位，实际部署请替换为主站域名
+
+    # --------------------------------------------------------
+    # 要点 1：子路径部署 —— 产品挂在 /app/ 下，而不是独立子域名。
+    # 好处：只需一张证书、一个域名，避免多子域名带来的证书与运维负担。
+    # --------------------------------------------------------
+
+    # --------------------------------------------------------
+    # 要点 2：API 反代必须带 URI。
+    # 关键：proxy_pass 末尾必须带 /api/。
+    # 不带 URI 时 nginx 会把 /app/api/x 原样转发给后端，
+    # 后端只认 /api/x → 返回 405。
+    # --------------------------------------------------------
+    location ^~ /app/api/ {
+        proxy_pass http://127.0.0.1:8093/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 300s;    # 接口可能耗时较长，放宽读超时
+        proxy_send_timeout 300s;
+    }
+
+    # --------------------------------------------------------
+    # 要点 3：静态资源反代（同样必须带 URI，规则同 API）。
+    # --------------------------------------------------------
+    location ^~ /app/static/ {
+        proxy_pass http://127.0.0.1:8093/static/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # --------------------------------------------------------
+    # 要点 4：下载目录 alias。
+    # 注意：location 与 alias 的尾斜杠必须成对一致，
+    # 否则会出现 404 或路径拼接错误。
+    # --------------------------------------------------------
+    location ^~ /app/downloads/ {
+        alias /opt/app/downloads/;   # 尾斜杠必须与 location 一致
+        autoindex off;
+        add_header Content-Disposition "attachment";
+    }
+
+    # --------------------------------------------------------
+    # 要点 5：单页应用兜底，需要两条规则。
+    #  1) location = /app/   精确匹配首页，避免 try_files 把
+    #     目录请求也拿去匹配 /app/index.html。
+    #  2) location ^~ /app/  前缀匹配所有未命中的 /app/* 路由，
+    #     try_files 交给前端路由（/app/index.html）处理。
+    # 两条缺一不可：只有前缀匹配时 /app/ 会先命中 = /app/ 的
+    # 精确规则；只有精确匹配时其余前端路由会 404。
+    # --------------------------------------------------------
+    location = /app/ {
+        alias /opt/app/web/;
+    }
+    location ^~ /app/ {
+        alias /opt/app/web/;
+        try_files $uri /app/index.html =404;
+    }
+}
+
+# ============================================================
+# 权限提醒：
+# 静态目录（如 /opt/app/web/）的每一级父目录都必须有 x 权限，
+# 否则 nginx 返回 403（注意：是 403，不是 404）。
+# 检查命令：namei -l <path>
+#   例如：namei -l /opt/app/web/index.html
+# 检查结果中每个目录都应带有 x 权限位。
+# ============================================================

@@ -20,13 +20,13 @@
 | 你要做的事 | 先读 | 再读（按需） |
 |---|---|---|
 | **从零建一个新项目** | `PROJECT-RUN/AGENT-BOOTSTRAP.md`（填变量 → 先出计划 → 等人审） | `PROJECT-RUN/checklist.md`、`PROJECT-RUN/AGENT-PROTOCOL.md` P0/P1 |
-| **给现有项目加功能** | `PROJECT-RUN/AGENT-PROTOCOL.md` P2 | `PROJECT-RUN/CRAFTS/TDD.md`（规划中）、`PROJECT-RUN/CRAFTS/REVIEW.md`（规划中） |
-| **做设计 / 技术选型** | `PROJECT-RUN/CRAFTS/DESIGN.md`（规划中） | `PROJECT-RUN/templates/ADR-TEMPLATE.md` |
-| **发版 / 打包 / 上线** | `PROJECT-RUN/RELEASE.md`（规划中） | `PROJECT-RUN/templates/DEPLOY/`（规划中） |
+| **给现有项目加功能** | `PROJECT-RUN/AGENT-PROTOCOL.md` P2 | `PROJECT-RUN/CRAFTS/TDD.md`、`PROJECT-RUN/CRAFTS/REVIEW.md` |
+| **做设计 / 技术选型** | `PROJECT-RUN/CRAFTS/DESIGN.md` | `PROJECT-RUN/ARCH-PATTERNS.md`、`PROJECT-RUN/templates/ADR-TEMPLATE.md` |
+| **发版 / 打包 / 上线** | `PROJECT-RUN/RELEASE.md` | `PROJECT-RUN/templates/DEPLOY/`（规划中） |
 | **做注册码 / 授权 / 后台服务** | `PROJECT-RUN/LICENSING.md` | `PROJECT-RUN/templates/LICENSING/` |
 | **派小模型子智能体干活** | `PROJECT-RUN/AGENT-DISPATCH.md` | — |
 | **单人 ↔ 团队切换** | `PROJECT-RUN/DUAL-MODE.md` | `PROJECT-RUN/templates/DORMANT-SWITCHES-TEMPLATE.md` |
-| **出事故了 / 要回滚** | `PROJECT-RUN/AGENT-PROTOCOL.md` P6 | `PROJECT-RUN/RELEASE.md`（规划中） 的撤回章节 |
+| **出事故了 / 要回滚** | `PROJECT-RUN/AGENT-PROTOCOL.md` P6 | `PROJECT-RUN/RELEASE.md` 的撤回章节 |
 | **想理解"为什么这样规定"** | `ENGINEERING-KIT/START-HERE.md` | `ENGINEERING-KIT/01-ENGINEERING-PLAYBOOK.md` |
 
 > 表里没出现的事 = 本库未覆盖 → 在 `PROGRESS.md` 写 `BLOCKED: <问题>`，等人决定。
@@ -55,9 +55,10 @@ engineering-standard/
 │   ├── FLOW.md                一页流程图
 │   ├── PROGRESS.md            台账（现成实例）
 │   ├── checklist.md          30 项启动检查单
-│   ├── RELEASE.md            发布 / 部署 / 撤回（规划中）
+│   ├── RELEASE.md            发布 / 部署 / 撤回
 │   ├── LICENSING.md          注册码 / 授权服务 / 密钥红线
-│   ├── CRAFTS/               工艺：设计 / TDD / 评审 / 验证（规划中）
+│   ├── ARCH-PATTERNS.md      架构模式：本地优先 / 可选云端 / 分层边界
+│   ├── CRAFTS/               工艺：设计 / TDD / 评审 / 验证
 │   └── templates/            模板（含 PROJECT-AGENT、ADR、CI、DEPLOY、LICENSING）
 └── ENGINEERING-KIT/          教材：理解原理时读
 ```

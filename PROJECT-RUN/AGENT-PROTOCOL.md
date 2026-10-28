@@ -182,6 +182,7 @@
 8. **AI 主导的 commit 末行必带 `AI-Model: <模型名>`**（AGENT.md AI 参与记录）。
 9. **不 push 到未确认的远程**；三远程拓扑见 GIT-SPEC §1。
 10. **U+FFFD=0 / LF 换行 / 中文优先** — 所有本仓库文档。
+11. **派发小模型执行时按其能力极限写提示词**：给完整路径/完整代码/可复制命令/可验证验收，禁止只给「思路」；见 [`AGENT-DISPATCH.md`](./AGENT-DISPATCH.md)。
 
 ## 附录 · Agent 自查 checklist（每次行动前扫一遍）
 

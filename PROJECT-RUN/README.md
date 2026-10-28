@@ -10,6 +10,8 @@
 
 **双模说明**：SOLO 起步、TEAM 切换，见 [`DUAL-MODE.md`](./DUAL-MODE.md)。
 
+**派工说明**：把任务交给小模型子智能体时，按其能力极限写提示词，见 [`AGENT-DISPATCH.md`](./AGENT-DISPATCH.md)。
+
 ## Agent 用 · 零步上手
 
 读 [`AGENT-PROTOCOL.md`](./AGENT-PROTOCOL.md) + [`PROGRESS.md`](./PROGRESS.md) 即开工（1k token 内），按 P0-P6 阶段状态机执行。
@@ -23,6 +25,7 @@
 | `AGENT-PROTOCOL.md` | Agent 阶段状态机（P0-P6 + 台账 + 全局红线） |
 | `PROGRESS.md` | 现成台账（已按模板实例化，占位符保留） |
 | `DUAL-MODE.md` | 双模工程协议：SOLO/TEAM 切换、休眠开关、模式标记 |
+| `AGENT-DISPATCH.md` | 小模型子智能体派发规范：五段式模板、七种失败对策、验收清单 |
 | `checklist.md` | 30 项启动检查单 |
 | `templates/ci-template.yml` | 精简版硬门 CI 骨架 → `.github/workflows/ci.yml` |
 | `templates/security-template.yml` | 安全扫描骨架 → `.github/workflows/security.yml` |

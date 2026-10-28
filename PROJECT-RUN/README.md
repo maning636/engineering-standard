@@ -48,3 +48,12 @@ cp -r docs/engineering/PROJECT-RUN/* .
 # 然后：替换 templates/ 与 PROGRESS.md 里的 {{项目名}} 等占位符
 grep -rn '{{' . --exclude-dir=.git --exclude-dir=node_modules
 ```
+
+---
+
+## 许可
+
+本库采用 **CC BY-NC-SA 4.0**（署名-非商业性使用-相同方式共享）许可：
+可自由阅读、评审与在非商业项目中改编，**不得用于商业目的**。商业授权需另行取得。
+
+完整条款见仓库根 `LICENSE`。

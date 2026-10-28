@@ -70,3 +70,12 @@ engineering-standard/
 读 https://github.com/maning636/engineering-standard 的 START-HERE.md，
 按其中的路由执行。每个里程碑给验收命令和实际输出，没覆盖的写 BLOCKED。
 ```
+
+---
+
+## 许可
+
+本库采用 **CC BY-NC-SA 4.0**（署名-非商业性使用-相同方式共享）许可：
+可自由阅读、评审与在非商业项目中改编，**不得用于商业目的**。商业授权需另行取得。
+
+完整条款见仓库根 `LICENSE`。

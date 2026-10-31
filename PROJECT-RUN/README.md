@@ -31,6 +31,8 @@
 | `templates/security-template.yml` | 安全扫描骨架 → `.github/workflows/security.yml` |
 | `templates/AGENT-TEMPLATE.md` | AGENTS.md 骨架 → `AGENT.md` |
 | `templates/ADR-TEMPLATE.md` | 单条 ADR 模板 → `docs/architecture/decisions/` |
+| `templates/VISION-TEMPLATE.md` | 产品哲学模板（SHOULD DO / SHOULD NEVER DO / 显式不做什么）→ `docs/Vision.md` |
+| `templates/BUILDSPEC-TEMPLATE.md` | 本期构建范围契约（阶段 ≤3、人工批准）→ `docs/BuildSpec-*.md`；P2 立项门禁用 |
 | `templates/PROGRESS-TEMPLATE.md` | 台账模板（`PROGRESS.md` 即由其实例化） |
 | `templates/PULL_REQUEST_TEMPLATE.md` | PR 模板 → `.github/pull_request_template.md`（十节：验证证据/坑清单/文档同步/AI 记录/TEAM 人工复核声明） |
 | `templates/CODEOWNERS-TEMPLATE` | CODEOWNERS 骨架（`[DORMANT - TEAM MODE]` 全注释） |

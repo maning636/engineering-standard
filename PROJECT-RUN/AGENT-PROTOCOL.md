@@ -70,6 +70,11 @@
 步骤：
 1. 领取任务：读 issue / 需求 / 用户请求，写在 PROGRESS.md「任务栈」。
    验证：任务描述 ≤5 行，含验收标准。
+   **立项门禁**：大型变更 / 新功能 / 存储结构变更 / 重大重构 → 先立项再领：
+   按需实例化 `templates/VISION-TEMPLATE.md`（哲学与红线）与
+   `templates/BUILDSPEC-TEMPLATE.md`（本期范围，**≤3 阶段**），
+   **经人工批准**后方可拆入任务栈；小修改直接进任务栈，不立 spec。
+   Agent 不得在没有批准 BuildSpec 的情况下启动大型变更。
 2. TDD 红→绿：先写失败测试 → 跑一遍看到红 → 写实现 → 跑到绿。
    验证：`pytest -x` exit=0，且新增测试先红后绿有据可查（commit diff 里 test 与 impl 同 PR）。
 3. 本地四步全绿：`pytest` + lint + `tsc` + deps-gate。

@@ -26,6 +26,11 @@
 | `PROGRESS.md` | 现成台账（已按模板实例化，占位符保留） |
 | `DUAL-MODE.md` | 双模工程协议：SOLO/TEAM 切换、休眠开关、模式标记 |
 | `AGENT-DISPATCH.md` | 小模型子智能体派发规范：五段式模板、七种失败对策、验收清单 |
+| `REQUIREMENTS.md` | 需求编号、H2 映射、追踪矩阵与 CP 变更控制 |
+| `ORCHESTRATION.md` | 多模块契约、任务图、可信基线与合并检查 |
+| `CRAFTS/ACCEPTANCE.md` | 客户 UAT、问题分级与验收结论；正式发布前执行 |
+| `CRAFTS/EVAL.md` | AI 评估集、代理/语义判分、基线与回归 |
+| `scripts/orchestrate/` | 任务图、合并门、追踪与评估的零依赖 Node 脚本 |
 | `checklist.md` | 30 项启动检查单 |
 | `templates/ci-template.yml` | 精简版硬门 CI 骨架 → `.github/workflows/ci.yml` |
 | `templates/security-template.yml` | 安全扫描骨架 → `.github/workflows/security.yml` |

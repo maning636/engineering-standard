@@ -192,3 +192,13 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           & .\scripts\tests\e2e_test.ps1 -TimeoutSec 60
+
+# 可选：AI 功能评估回归。仅在评估集与被测接口已就绪时作为独立硬门启用。
+# 固定 promptfoo 版本；密钥只放 CI secrets，evals/out/ 和生成的 tests jsonl 不入库。
+# - name: eval
+#   run: |
+#     node scripts/orchestrate/eval-check.mjs lint evals/kb-qa.jsonl --min 50
+#     node scripts/orchestrate/eval-check.mjs export evals/kb-qa.jsonl --out evals/kb-qa.tests.jsonl
+#     npx --yes promptfoo@0.125.1 eval -c evals/kb-qa.yaml --output evals/out/results.jsonl
+#     node scripts/orchestrate/eval-check.mjs summarize evals/out/results.jsonl --set evals/kb-qa.jsonl --out evals/out/summary.json
+#     node scripts/orchestrate/eval-check.mjs check evals/out/summary.json --rules evals/kb-qa.rules.json --baseline evals/baselines/kb-qa-<上一版>.json

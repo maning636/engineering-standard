@@ -1,0 +1,27 @@
+# 华锐 F03 知识库问答评估配置（示例）。追踪表里的 `evals/kb-qa.yaml` 指的就是这个文件。
+# 题目在 kb-qa.jsonl，先用 eval-check export 转成 kb-qa.tests.jsonl，再交给 promptfoo。
+# 示例：v0.2 换成更便宜的模型后，answer_correct 从 100% 降到 85.7%，check 判不通过。
+description: 华锐 SOP 知识库问答（F03）
+
+providers:
+  - id: https://huarui-kb.example.com/api/qa
+    config:
+      method: POST
+      headers:
+        Content-Type: application/json
+      body:
+        question: '{{question}}'
+      transformResponse: json.answer
+
+prompts:
+  - '{{question}}'
+
+defaultTest:
+  options:
+    provider: openai:<评审模型名>
+  assert:
+    - type: latency
+      threshold: 10000
+      metric: latency
+
+tests: file://kb-qa.tests.jsonl

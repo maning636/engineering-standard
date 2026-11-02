@@ -1,0 +1,10 @@
+{
+  "min_cases": 10,
+  "max_drop_pp": 2,
+  "metrics": {
+    "answer_correct": { "min": 0.90 },
+    "citation_correct": { "min": 0.95 },
+    "refusal_correct": { "min": 0.95 },
+    "latency": { "min": 0.95 }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "eval_set": "kb-qa",
+  "eval_set_hash": "d048ed2bf926bf0dc4edff97c3032048582bf4bffba76a71487b9804f6a97a7a",
+  "version": "v0.2",
+  "model": "示例模型 B（换了更便宜的模型）",
+  "prompt_version": "p-2026-10-28",
+  "cases": 10,
+  "errors": 0,
+  "missing": [],
+  "metrics": {
+    "answer_correct": { "pass": 6, "total": 7, "rate": 0.8571 },
+    "citation_correct": { "pass": 7, "total": 7, "rate": 1 },
+    "refusal_correct": { "pass": 3, "total": 3, "rate": 1 },
+    "latency": { "pass": 10, "total": 10, "rate": 1 }
+  }
+}

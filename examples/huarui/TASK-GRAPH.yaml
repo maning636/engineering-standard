@@ -1,0 +1,123 @@
+# 任务图 · REQ-2026-0001 · 华锐精密 企业知识库 + 物料问答（示例）
+# 模块划分沿用 ARCH-MAP：shared / materials / kb / api / web
+# 需求：F01 物料导入  F02 物料查询  F03 知识库问答  F04 管理后台
+# 校验：node scripts/orchestrate/next-tasks.mjs validate examples/huarui/TASK-GRAPH.yaml
+
+version: 1
+project: REQ-2026-0001
+integration_branch: integration
+contracts_dir: contracts
+
+gate:
+  contract_test: "npm run contract-test"
+  full_test: "npm test"
+  lint: "npm run lint"
+
+tasks:
+  - id: T-001
+    title: "公共类型、错误码、配置读取"
+    req: [ARCH]
+    depends_on: []
+    write_scope: [src/shared/**]
+    read_scope: [contracts/**]
+    contracts: [contracts/types.ts]
+    accept: "npm test -- shared"
+    budget: { files: 5, retries: 2 }
+    status: ready
+    owner: ""
+
+  - id: T-002
+    title: "物料导入：Excel 解析与校验"
+    req: [REQ-2026-0001-F01]
+    depends_on: [T-001]
+    write_scope: [src/materials/import/**]
+    read_scope: [contracts/**, src/shared/**]
+    contracts: [contracts/materials.ts]
+    accept: "npm test -- materials.import"
+    budget: { files: 6, retries: 2 }
+    status: todo
+    owner: ""
+
+  - id: T-003
+    title: "物料查询：按编号、名称、规格检索"
+    req: [REQ-2026-0001-F02]
+    depends_on: [T-001]
+    write_scope: [src/materials/query/**]
+    read_scope: [contracts/**, src/shared/**]
+    contracts: [contracts/materials.ts]
+    accept: "npm test -- materials.query"
+    budget: { files: 5, retries: 2 }
+    status: todo
+    owner: ""
+
+  - id: T-004
+    title: "知识库：文档切分与入库"
+    req: [REQ-2026-0001-F03]
+    depends_on: [T-001]
+    write_scope: [src/kb/ingest/**]
+    read_scope: [contracts/**, src/shared/**]
+    contracts: [contracts/retriever.ts]
+    accept: "npm test -- kb.ingest"
+    budget: { files: 6, retries: 2 }
+    status: todo
+    owner: ""
+
+  - id: T-005
+    title: "知识库：检索与带出处的回答"
+    req: [REQ-2026-0001-F03]
+    depends_on: [T-004]
+    write_scope: [src/kb/retriever/**, src/kb/answer/**]
+    read_scope: [contracts/**, src/shared/**]
+    contracts: [contracts/retriever.ts]
+    accept: "npm test -- kb.retriever"
+    budget: { files: 8, retries: 2 }
+    status: todo
+    owner: ""
+
+  - id: T-006
+    title: "接口层：物料与问答路由、鉴权"
+    req: [REQ-2026-0001-F02, REQ-2026-0001-F03]
+    depends_on: [T-002, T-003, T-005]
+    write_scope: [src/api/**]
+    read_scope: [contracts/**, src/shared/**]
+    contracts: [contracts/api.ts]
+    accept: "npm test -- api"
+    budget: { files: 8, retries: 2 }
+    status: todo
+    owner: ""
+
+  - id: T-007
+    title: "前端：物料查询页与问答页"
+    req: [REQ-2026-0001-F02, REQ-2026-0001-F03]
+    depends_on: [T-006]
+    write_scope: [src/web/pages/query/**, src/web/pages/chat/**]
+    read_scope: [contracts/api.ts]
+    contracts: [contracts/api.ts]
+    accept: "npm test -- web.query web.chat"
+    budget: { files: 8, retries: 2 }
+    status: todo
+    owner: ""
+
+  - id: T-008
+    title: "前端：管理后台（导入、文档管理、账号）"
+    req: [REQ-2026-0001-F04]
+    depends_on: [T-006]
+    write_scope: [src/web/pages/admin/**]
+    read_scope: [contracts/api.ts]
+    contracts: [contracts/api.ts]
+    accept: "npm test -- web.admin"
+    budget: { files: 8, retries: 2 }
+    status: todo
+    owner: ""
+
+  - id: T-009
+    title: "端到端用例：对应 UAT 主路径"
+    req: [REQ-2026-0001-F01, REQ-2026-0001-F02, REQ-2026-0001-F03, REQ-2026-0001-F04]
+    depends_on: [T-007, T-008]
+    write_scope: [tests/e2e/**]
+    read_scope: [docs/acceptance/UAT-CASES.md, contracts/**]
+    contracts: []
+    accept: "npm run e2e"
+    budget: { files: 6, retries: 2 }
+    status: todo
+    owner: ""

@@ -57,6 +57,11 @@ try {
   console.error(e instanceof GraphError ? `可信基线任务图解析失败：${e.message}` : String(e));
   process.exit(2);
 }
+const trustedErrors = validateGraph(trustedGraph);
+if (trustedErrors.length) {
+  console.error(`可信基线任务图校验失败：\n- ${trustedErrors.join('\n- ')}`);
+  process.exit(2);
+}
 const trustedTask = trustedGraph.tasks.find((x) => x.id === taskId);
 const fails = [];
 const report = [];

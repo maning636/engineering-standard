@@ -208,7 +208,7 @@ promptfoo 常用断言和本规范指标的对应：
 ```bash
 node scripts/orchestrate/eval-check.mjs lint evals/kb-qa.jsonl --min 50
 node scripts/orchestrate/eval-check.mjs export evals/kb-qa.jsonl --out evals/kb-qa.tests.jsonl --refusal "未在 SOP 中找到"
-npx promptfoo@<固定版本> eval -c evals/kb-qa.yaml --output results.jsonl
+npx --yes promptfoo@0.125.1 eval -c evals/kb-qa.yaml --output results.jsonl
 node scripts/orchestrate/eval-check.mjs summarize results.jsonl --set evals/kb-qa.jsonl --out summary.json
 node scripts/orchestrate/eval-check.mjs check summary.json --rules evals/kb-qa.rules.json --baseline evals/baselines/kb-qa-v1.1.json
 ```

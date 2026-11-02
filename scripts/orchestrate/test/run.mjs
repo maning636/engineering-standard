@@ -142,6 +142,17 @@ try {
   write('src/a/index.ts', 'export const a = 10;\n');
   check('未在可信基线登记的新任务被拒', node(GATE, 'T-NEW', '--graph', G, '--base', 'integration'), 1, '未在可信基线');
 
+  git('checkout', '-q', 'integration');
+  write(G, graph('node -e \\"process.exit(0)\\"').replace('    accept: "node -e \\"process.exit(0)\\""\n', ''));
+  git('commit', '-qam', 'test: invalid trusted graph');
+  resetBranch('task/T-001-invalid-base');
+  write(G, graph('node -e \\"process.exit(0)\\"'));
+  write('src/a/index.ts', 'export const a = 14;\n');
+  check('可信基线任务图缺字段返回环境错误', node(GATE, 'T-001', '--graph', G, '--base', 'integration'), 2, '可信基线任务图');
+  git('checkout', '-q', 'integration');
+  write(G, graph('node -e \\"process.exit(0)\\"'));
+  git('commit', '-qam', 'test: restore valid trusted graph');
+
   resetBranch('task/T-001-status');
   editGraph((text) => text.replace('status: doing', 'status: review').replace('owner: "agent-1"', 'owner: "agent-2"'));
   write('src/a/index.ts', 'export const a = 11;\n');
@@ -243,6 +254,7 @@ try {
   check('eval check 比基线下降超过 2pp 返回 1', node(EVAL, 'check', 'evals/ok.json', '--rules', 'evals/rules.json', '--baseline', 'evals/base2.json'), 1, '比基线下降');
 
   check('eval summarize 记录评估集哈希', sum, 0, '"eval_set_hash"');
+  check('eval summarize 非法评估集返回用法错误', node(EVAL, 'summarize', 'evals/results.jsonl', '--set', 'evals/bad.jsonl'), 2, 'lint');
 
   const validRows = [
     row('K1', [['answer_correct', true], ['citation_correct', true]]),

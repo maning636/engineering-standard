@@ -163,6 +163,7 @@ function cmdSummarize(args) {
   let evalSetHash;
   if (setFile) {
     const r = lintSet(setFile);
+    if (r.errors.length) die(`评估集 lint 未通过：${r.errors.join('；')}`);
     set = new Map(r.rows.filter((x) => !isVoid(x.data)).map((x) => [x.data.id, x.data]));
     evalSetHash = createHash('sha256').update(readText(setFile)).digest('hex');
   }

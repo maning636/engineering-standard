@@ -44,7 +44,7 @@ web ──► api ──► materials ──► shared
 
 | 决策 | 选择 | ADR |
 |---|---|---|
-| 后端语言 / 框架 | | `docs/adr/0001-*.md` |
+| 后端语言 / 框架 | | `docs/architecture/decisions/0001-*.md` |
 | 数据库 | | |
 | 向量检索 | | |
 | 大模型调用方式 | | |

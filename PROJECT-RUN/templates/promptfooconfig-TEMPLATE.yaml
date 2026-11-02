@@ -4,7 +4,7 @@
 # 流程：
 #   1. node scripts/orchestrate/eval-check.mjs lint evals/kb-qa.jsonl --min 50
 #   2. node scripts/orchestrate/eval-check.mjs export evals/kb-qa.jsonl --out evals/kb-qa.tests.jsonl --refusal "未在 SOP 中找到"
-#   3. npx promptfoo@<固定版本> eval -c evals/kb-qa.yaml --output evals/out/results.jsonl
+#   3. npx --yes promptfoo@0.125.1 eval -c evals/kb-qa.yaml --output evals/out/results.jsonl
 #   4. node scripts/orchestrate/eval-check.mjs summarize evals/out/results.jsonl --set evals/kb-qa.jsonl --out evals/out/summary.json
 #   5. node scripts/orchestrate/eval-check.mjs check evals/out/summary.json --rules evals/kb-qa.rules.json --baseline evals/baselines/kb-qa-v1.0.json
 #

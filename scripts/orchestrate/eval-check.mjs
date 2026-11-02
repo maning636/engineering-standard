@@ -8,6 +8,7 @@
 // 退出码：0 通过；1 不达标；2 用法或文件错误。
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { basename } from 'node:path';
+import { createHash } from 'node:crypto';
 
 const TYPES = new Set(['常规', '边界', '对抗']);
 const MIN_REFUSE_RATIO = 0.2;
@@ -158,14 +159,24 @@ function cmdSummarize(args) {
   if (promptIdx !== undefined) rows = rows.filter((r) => String(r.promptIdx ?? 0) === promptIdx);
   else if (idxs.size > 1) die(`结果里有 ${idxs.size} 组提示词或模型，用 --prompt-idx 指定一组`);
 
+  let set = null;
+  let evalSetHash;
+  if (setFile) {
+    const r = lintSet(setFile);
+    set = new Map(r.rows.filter((x) => !isVoid(x.data)).map((x) => [x.data.id, x.data]));
+    evalSetHash = createHash('sha256').update(readText(setFile)).digest('hex');
+  }
+
   const perCase = new Map();
-  let errors = 0;
+  const errorDetails = [];
   rows.forEach((row, i) => {
     const id = caseIdOf(row) ?? `#${row.testIdx ?? i}`;
+    if (perCase.has(id)) errorDetails.push(`${id}：结果重复`);
+    if (set && !set.has(id)) errorDetails.push(`${id}：结果不在评估集中`);
     const comps = row?.gradingResult?.componentResults;
     const m = perCase.get(id) ?? {};
     if (!Array.isArray(comps) || comps.length === 0) {
-      errors += 1;
+      errorDetails.push(`${id}：没有判分结果`);
       m.__error = true;
     } else {
       for (const c of comps) {
@@ -176,11 +187,6 @@ function cmdSummarize(args) {
     perCase.set(id, m);
   });
 
-  let set = null;
-  if (setFile) {
-    const r = lintSet(setFile);
-    set = new Map(r.rows.filter((x) => !isVoid(x.data)).map((x) => [x.data.id, x.data]));
-  }
   const metrics = {};
   const add = (name, pass) => {
     metrics[name] ??= { pass: 0, total: 0, rate: 0 };
@@ -198,7 +204,8 @@ function cmdSummarize(args) {
 
   const missing = set ? [...set.keys()].filter((id) => !perCase.has(id)) : [];
   const setName = setFile ? basename(setFile).replace(/\.jsonl$/, '') : undefined;
-  const summary = { eval_set: setName, cases: perCase.size, errors, missing, metrics };
+  const errors = errorDetails.length;
+  const summary = { eval_set: setName, eval_set_hash: evalSetHash, cases: perCase.size, errors, error_details: errorDetails, missing, metrics };
   const text = JSON.stringify(summary, null, 2) + '\n';
   if (out) writeFileSync(out, text);
   process.stdout.write(text);
@@ -222,10 +229,15 @@ function cmdCheck(args) {
   if (rules.min_cases !== undefined && (s.cases ?? 0) < rules.min_cases) {
     fails.push(`题数 ${s.cases ?? 0} 少于 min_cases ${rules.min_cases}`);
   }
-  if (s.errors) fails.push(`有 ${s.errors} 题运行出错（没有判分结果）`);
+  if (s.errors) fails.push(`有 ${s.errors} 项评估结果错误（运行错误、重复或集合外题目）`);
   if (Array.isArray(s.missing) && s.missing.length) fails.push(`有 ${s.missing.length} 题没有结果`);
   if (base && base.eval_set && s.eval_set && base.eval_set !== s.eval_set) {
     console.log(`注意：基线评估集 ${base.eval_set} 和本次 ${s.eval_set} 不同`);
+  }
+  if (base && !base.eval_set_hash) console.log('注意：旧基线未记录评估集哈希，本次按兼容模式比较');
+  if (base?.eval_set_hash && !s.eval_set_hash) fails.push('本次结果缺少评估集哈希，无法与基线核对');
+  if (base?.eval_set_hash && s.eval_set_hash && base.eval_set_hash !== s.eval_set_hash) {
+    fails.push('评估集哈希与基线不一致（同名文件的内容已变化）');
   }
 
   console.log('指标\t阈值\t基线\t本次\t变化(pp)\t结论');

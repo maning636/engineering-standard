@@ -241,6 +241,33 @@ try {
 
   write('evals/base2.json', JSON.stringify({ eval_set: 'set', cases: 4, metrics: { answer_correct: { pass: 4, total: 4, rate: 1 } } }));
   check('eval check 比基线下降超过 2pp 返回 1', node(EVAL, 'check', 'evals/ok.json', '--rules', 'evals/rules.json', '--baseline', 'evals/base2.json'), 1, '比基线下降');
+
+  check('eval summarize 记录评估集哈希', sum, 0, '"eval_set_hash"');
+
+  const validRows = [
+    row('K1', [['answer_correct', true], ['citation_correct', true]]),
+    row('K2', [['answer_correct', true], ['citation_correct', true]]),
+    row('K3', [['answer_correct', true], ['citation_correct', true]]),
+    row('K4', [['refusal_correct', true]]),
+  ];
+  write('evals/duplicate.jsonl', [...validRows, validRows[0]].join('\n') + '\n');
+  const duplicate = node(EVAL, 'summarize', 'evals/duplicate.jsonl', '--set', 'evals/set.jsonl', '--out', 'evals/duplicate-summary.json');
+  check('eval summarize 重复 ID 计入错误', duplicate, 0, '"errors": 1');
+  check('eval check 重复 ID 阻断', node(EVAL, 'check', 'evals/duplicate-summary.json', '--rules', 'evals/rules.json'), 1, '评估结果错误');
+
+  write('evals/extra.jsonl', [...validRows, row('X1', [['answer_correct', true]])].join('\n') + '\n');
+  const extra = node(EVAL, 'summarize', 'evals/extra.jsonl', '--set', 'evals/set.jsonl', '--out', 'evals/extra-summary.json');
+  check('eval summarize 集合外 ID 计入错误', extra, 0, '"errors": 1');
+  check('eval check 集合外 ID 阻断', node(EVAL, 'check', 'evals/extra-summary.json', '--rules', 'evals/rules.json'), 1, '评估结果错误');
+
+  write('evals/missing.jsonl', validRows.slice(0, 3).join('\n') + '\n');
+  const missing = node(EVAL, 'summarize', 'evals/missing.jsonl', '--set', 'evals/set.jsonl', '--out', 'evals/missing-summary.json');
+  check('eval summarize 缺题进入 missing', missing, 0, '"K4"');
+  check('eval check 缺题阻断', node(EVAL, 'check', 'evals/missing-summary.json', '--rules', 'evals/rules.json'), 1, '没有结果');
+
+  write('evals/okhash.json', JSON.stringify({ eval_set: 'set', eval_set_hash: 'aaa', cases: 4, errors: 0, missing: [], metrics: { answer_correct: { pass: 3, total: 4, rate: 0.75 } } }));
+  write('evals/basehash.json', JSON.stringify({ eval_set: 'set', eval_set_hash: 'bbb', cases: 4, errors: 0, missing: [], metrics: { answer_correct: { pass: 4, total: 4, rate: 0.76 } } }));
+  check('eval check 同名不同内容评估集哈希不匹配', node(EVAL, 'check', 'evals/okhash.json', '--rules', 'evals/rules.json', '--baseline', 'evals/basehash.json'), 1, '哈希');
 } catch (e) {
   results.push({ name: '测试环境', ok: false });
   console.log('FAIL  测试环境出错：' + e.message);

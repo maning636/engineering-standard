@@ -1,0 +1,22 @@
+description: 华锐 SOP 知识库问答 · promptfoo 本地链路冒烟（虚构数据）
+
+providers:
+  - id: http://127.0.0.1:43197/api/qa
+    config:
+      method: POST
+      headers:
+        Content-Type: application/json
+      body:
+        question: '{{question}}'
+      transformResponse: json.answer
+
+prompts:
+  - '{{question}}'
+
+defaultTest:
+  assert:
+    - type: latency
+      threshold: 10000
+      metric: latency
+
+tests: file://kb-qa.smoke.tests.jsonl

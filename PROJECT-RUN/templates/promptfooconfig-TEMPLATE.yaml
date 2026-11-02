@@ -1,0 +1,50 @@
+# promptfoo 评估配置模板。放在项目的 evals/<集名>.yaml。
+# 规范见 PROJECT-RUN/CRAFTS/EVAL.md 附录 A。工具可替换，规范只认 summary.json。
+#
+# 流程：
+#   1. node scripts/orchestrate/eval-check.mjs lint evals/kb-qa.jsonl --min 50
+#   2. node scripts/orchestrate/eval-check.mjs export evals/kb-qa.jsonl --out evals/kb-qa.tests.jsonl --refusal "未在 SOP 中找到"
+#   3. npx promptfoo@<固定版本> eval -c evals/kb-qa.yaml --output evals/out/results.jsonl
+#   4. node scripts/orchestrate/eval-check.mjs summarize evals/out/results.jsonl --set evals/kb-qa.jsonl --out evals/out/summary.json
+#   5. node scripts/orchestrate/eval-check.mjs check evals/out/summary.json --rules evals/kb-qa.rules.json --baseline evals/baselines/kb-qa-v1.0.json
+#
+# 第 2 步生成的 tests 文件只含规则判分（contains-all / contains-any / icontains）。
+# 模型判分、延迟等断言写在下面的 defaultTest 里，对每一题生效。
+
+description: kb-qa 知识库问答评估
+
+# 被测对象。下面是直接调接口的写法（HTTP provider），字段以 promptfoo 官方文档为准。
+# 只测提示词时，改成模型 provider（如 openai:<模型名>）并把 prompts 换成提示词文件。
+providers:
+  - id: https://your-app.example.com/api/qa
+    config:
+      method: POST
+      headers:
+        Content-Type: application/json
+      body:
+        question: '{{question}}'
+      transformResponse: json.answer
+
+prompts:
+  - '{{question}}'
+
+defaultTest:
+  options:
+    # 评审模型：和被测模型不同厂商。也可以运行时用 --grader 指定。
+    provider: openai:<评审模型名>
+  assert:
+    - type: latency
+      threshold: 10000
+      metric: latency
+    # 要点难以穷举时打开下面这条。中文评分必须配中文 rubricPrompt，内容和评估集说明第 3 节一致。
+    # - type: llm-rubric
+    #   value: 回答中所有事实都能在给定出处找到，没有编造数字、条款或型号。
+    #   metric: no_fabrication
+
+tests: file://kb-qa.tests.jsonl
+
+# 知识库类可加检索命中率（需要接口把检索到的片段一起返回）：
+#   - type: context-recall
+#     value: 标准答案要点
+#     contextTransform: output.context
+#     metric: retrieval_hit

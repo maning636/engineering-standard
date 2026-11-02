@@ -80,3 +80,12 @@
 | 源码包与安装包版本不一致 | 落地页区块"存在即跳过" | 改为替换语义 |
 | 打包报 ECONNREFUSED 或 ETIMEDOUT | 代理与镜像配置冲突 | 清代理 + 设镜像 |
 | 发布后用户仍拿到旧版 | 覆盖旧包或落地页未更新 | 发布前校验落地页指向 |
+
+## 9. 签约项目的验收门禁
+
+正式打 tag、发布或交付上线前，除本章既有门禁外，还必须：
+- `docs/acceptance/ACCEPTANCE-REPORT-<版本>.md` 的结论为“通过”或“有条件通过”，B 级问题均有责任人和期限；
+- `node scripts/orchestrate/trace-check.mjs docs/requirements/TRACE-MATRIX.md --stage release` 退出码 0；
+- AI 功能另需 `eval-check check` 退出码 0，当次结果和评估集哈希已存为新基线。
+
+用于客户 UAT 的候选包应清楚标注非正式发布；候选包验证不能替代上述验收结论。自有产品没有客户验收时，按产品发布路径执行，不虚构签字。

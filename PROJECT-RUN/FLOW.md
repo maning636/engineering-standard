@@ -100,3 +100,12 @@
 - 协议未覆盖 → 写 `BLOCKED` 留人，不自由发挥
 - 决策变更必须写 ADR；AI 主导 commit 末行 `AI-Model:`
 - U+FFFD=0 / LF 换行 / 中文优先
+
+## 扩展（候选）· 需求、验收与 AI 评估
+
+- P0 仍是建仓，不改变含义；产品探索可以先做轻量原型，不强制完整 H2。
+- 签约客户项目及多模块正式开发，在 P2 接受并锁定 H2 需求基线；映射见 `REQUIREMENTS.md`。
+- 项目制在 P2/P3 完成 VERIFY 后进入 `CRAFTS/ACCEPTANCE.md` 的 A1～A5，正式 P4 RELEASE 之前取得验收结论。
+- 需要客户操作候选包时，可以提前构建未正式发布的 UAT 候选包；候选包不等于正式 tag/release，不得用“先发正式版再补验收”替代。
+- 多模块任务编排见 `ORCHESTRATION.md`；AI 功能从 P2 到发布执行 `CRAFTS/EVAL.md`。
+- 自有产品没有客户签字环节时，沿用 idea-to-cash 的 ship/收款路径，不虚构客户验收。

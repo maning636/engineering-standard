@@ -1,0 +1,15 @@
+{
+  "eval_set": "kb-qa",
+  "version": "v0.1",
+  "model": "示例模型 A",
+  "prompt_version": "p-2026-10-28",
+  "cases": 10,
+  "errors": 0,
+  "missing": [],
+  "metrics": {
+    "answer_correct": { "pass": 7, "total": 7, "rate": 1 },
+    "citation_correct": { "pass": 7, "total": 7, "rate": 1 },
+    "refusal_correct": { "pass": 3, "total": 3, "rate": 1 },
+    "latency": { "pass": 10, "total": 10, "rate": 1 }
+  }
+}

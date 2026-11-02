@@ -99,3 +99,9 @@
 | 方案只写一个 | 无对比 / 至少两个 |
 | 决策只记结论不记理由 | 后人无法判断能否推翻 / 写 ADR |
 | 把「以后再优化」当设计 | 技术债 / 写进非目标或待办，明确触发条件 |
+
+## 7. 多模块项目的结构产物
+
+多模块并行时，模块职责、依赖方向和命名以 `docs/arch/ARCH-MAP.md` 为准，接口以 `contracts/` 为准，任务拆分见 `ORCHESTRATION.md`。
+架构决策与取舍仍写 `docs/architecture/decisions/` 的 ADR：ARCH-MAP 描述当前结构，ADR 保存为什么这样决定，二者不互相复制。
+`MODULE-OWNERS-TEMPLATE.md` 只分配人的负责范围，不另建一套技术边界。

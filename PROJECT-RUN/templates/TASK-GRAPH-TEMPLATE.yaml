@@ -1,0 +1,67 @@
+# 任务图 · <业务ID> · <项目名>
+# 规范见 PROJECT-RUN/ORCHESTRATION.md。放在 docs/arch/TASK-GRAPH.yaml。
+# 校验：node scripts/orchestrate/next-tasks.mjs validate docs/arch/TASK-GRAPH.yaml
+#
+# 格式限制（脚本零依赖，自带的解析器只认下面这些写法，别的 YAML 语法会报错）：
+#   - 缩进只用空格，每级 2 个
+#   - 顶层：key: value，或 key: 后面换行跟一层 key: value
+#   - tasks 是列表，每项以 "- id:" 开头，字段写在同一缩进
+#   - 值可以是：裸字符串、带引号字符串、数字、true/false、流式数组 [a, b]、行内 map { files: 6, retries: 2 }
+#   - 支持 # 注释（引号内的 # 不算注释）
+#   - 不支持：多行字符串（| >）、锚点（& *）、嵌套列表
+#
+# status 取值：todo / ready / doing / review / done / blocked
+#   todo   依赖还没完成
+#   ready  依赖已完成，可以派发（list 会把依赖都 done 的 todo 也列出来）
+#   doing  已派发，owner 必填
+#   review 子代理已提交，等合并门
+#   done   合并门通过并已合进集成分支
+#   blocked 合并门第 3 次失败，等人处理
+
+version: 1
+project: REQ-2026-0001
+integration_branch: integration
+contracts_dir: contracts
+
+gate:
+  contract_test: "npm run contract-test"
+  full_test: "npm test"
+  lint: "npm run lint"
+
+tasks:
+  - id: T-001
+    title: "公共类型和错误码"
+    req: [ARCH]
+    depends_on: []
+    write_scope: [src/shared/**]
+    read_scope: [contracts/**]
+    contracts: [contracts/types.ts]
+    accept: "npm test -- shared"
+    budget: { files: 4, retries: 2 }
+    status: ready
+    owner: ""
+
+  - id: T-002
+    title: "检索实现"
+    req: [REQ-2026-0001-F03]
+    depends_on: [T-001]
+    write_scope: [src/kb/retriever/**]
+    read_scope: [contracts/**, src/shared/**]
+    contracts: [contracts/retriever.ts]
+    accept: "npm test -- retriever"
+    budget: { files: 6, retries: 2 }
+    status: todo
+    owner: ""
+
+  - id: T-003
+    title: "契约升级：检索增加图纸编号过滤（CC-01 批准后）"
+    req: [REQ-2026-0001-F03]
+    depends_on: [T-002]
+    write_scope: [contracts/retriever.ts, contracts/__tests__/**]
+    read_scope: [docs/arch/contract-changes/CC-01.md]
+    contracts: [contracts/retriever.ts]
+    accept: "npm run contract-test"
+    budget: { files: 3, retries: 2 }
+    contract_change: true
+    status: todo
+    owner: ""

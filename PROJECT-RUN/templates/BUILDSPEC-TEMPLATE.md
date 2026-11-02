@@ -49,3 +49,12 @@
 2. 阶段中途发现需要第 4 阶段 → **停止本 spec**，立新 BuildSpec，不原地加码。
 3. Agent 发现 spec 与 Vision 冲突或缺产品决策 → 不发明，回写
    `PROGRESS.md`「裁决记录」`BLOCKED: <问题>` 留给人类。
+
+## 本期覆盖需求编号
+
+- H2 版本：{{artifact_version / 轻量探索说明}}
+- 阶段 1：{{REQ-…-F01 / N01 / ARCH}}
+- 阶段 2：{{}}
+- 阶段 3：{{}}
+
+签约项目的编号与 `docs/requirements/TRACE-MATRIX.md` 一致；轻量原型不强制完整 H2，但假设和未决项必须可追踪。

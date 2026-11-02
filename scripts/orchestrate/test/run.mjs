@@ -58,6 +58,8 @@ ${extraTasks}`;
 const resetBranch = (name) => {
   git('checkout', '-q', 'integration');
   git('checkout', '-q', '-B', name);
+  git('checkout', '-q', '--', '.');
+  git('clean', '-fdq');
   rmSync(join(repo, '.orchestrate'), { recursive: true, force: true });
 };
 
@@ -99,13 +101,61 @@ try {
   git('checkout', '-q', '--', '.');
 
   // 4. 契约测试失败被拒；5. 第 3 次失败变 BLOCKED
-  resetBranch('task/T-001-ct');
+  git('checkout', '-q', 'integration');
   write(G, graph('node fail.mjs'));
+  git('commit', '-qam', 'test: trusted failing contract');
+  resetBranch('task/T-001-ct');
   write('src/a/index.ts', 'export const a = 5;\n');
   check('契约测试失败被拒', node(GATE, 'T-001', '--graph', G, '--base', 'integration'), 1, 'contract_test 失败');
   check('第 2 次失败仍可重做', node(GATE, 'T-001', '--graph', G, '--base', 'integration'), 1, '第 2/3 次');
   check('第 3 次失败变 BLOCKED', node(GATE, 'T-001', '--graph', G, '--base', 'integration'), 3, 'BLOCKED');
-  git('checkout', '-q', '--', '.');
+  git('checkout', '-q', 'integration');
+  write(G, graph('node -e \\"process.exit(0)\\"'));
+  git('commit', '-qam', 'test: restore trusted contract');
+
+  const editGraph = (fn) => write(G, fn(git('show', `HEAD:${G}`).stdout));
+
+  resetBranch('task/T-001-tamper-scope');
+  editGraph((text) => text.replace('write_scope: [src/a/**]', 'write_scope: ["**"]'));
+  write('src/a/index.ts', 'export const a = 6;\n');
+  write('src/b/index.ts', 'export const b = 10;\n');
+  check('工作分支扩大 write_scope 被拒', node(GATE, 'T-001', '--graph', G, '--base', 'integration'), 1, '受保护字段');
+
+  resetBranch('task/T-001-tamper-accept');
+  editGraph((text) => text.replace(/accept: "node -e .*"/, 'accept: "node --version"'));
+  write('src/a/index.ts', 'export const a = 7;\n');
+  check('工作分支替换 accept 被拒', node(GATE, 'T-001', '--graph', G, '--base', 'integration'), 1, '受保护字段');
+
+  resetBranch('task/T-001-tamper-budget');
+  editGraph((text) => text.replace('budget: { files: 3, retries: 2 }', 'budget: { files: 99, retries: 99 }'));
+  write('src/a/index.ts', 'export const a = 8;\n');
+  check('工作分支提高预算被拒', node(GATE, 'T-001', '--graph', G, '--base', 'integration'), 1, '受保护字段');
+
+  resetBranch('task/T-001-tamper-contract');
+  editGraph((text) => text.replace('accept: "node -e \\"process.exit(0)\\""', 'contract_change: true\n    accept: "node -e \\"process.exit(0)\\""'));
+  write('contracts/a.ts', 'export interface A { x: boolean }\n');
+  write('src/a/index.ts', 'export const a = 9;\n');
+  check('工作分支自批契约变更被拒', node(GATE, 'T-001', '--graph', G, '--base', 'integration'), 1, '受保护字段');
+
+  resetBranch('task/T-001-unregistered');
+  editGraph((text) => text.replace('id: T-001', 'id: T-NEW'));
+  write('src/a/index.ts', 'export const a = 10;\n');
+  check('未在可信基线登记的新任务被拒', node(GATE, 'T-NEW', '--graph', G, '--base', 'integration'), 1, '未在可信基线');
+
+  resetBranch('task/T-001-status');
+  editGraph((text) => text.replace('status: doing', 'status: review').replace('owner: "agent-1"', 'owner: "agent-2"'));
+  write('src/a/index.ts', 'export const a = 11;\n');
+  check('合法 status 和 owner 更新通过', node(GATE, 'T-001', '--graph', G, '--base', 'integration'), 0, 'PASS');
+
+  resetBranch('task/T-001-attempts');
+  write('.orchestrate/attempts.json', '{not-json');
+  write('src/a/index.ts', 'export const a = 12;\n');
+  check('损坏 attempts JSON 返回环境错误', node(GATE, 'T-001', '--graph', G, '--base', 'integration'), 2, 'attempts.json');
+
+  resetBranch('task/T-001-outside-graph');
+  write('../orchestrate-outside.yaml', graph('x'));
+  write('src/a/index.ts', 'export const a = 13;\n');
+  check('仓库外任务图返回环境错误', node(GATE, 'T-001', '--graph', '../orchestrate-outside.yaml', '--base', 'integration'), 2, '仓库外');
 
   // 6. 有环被拒
   write('cyc.yaml', graph('x', `  - id: T-003

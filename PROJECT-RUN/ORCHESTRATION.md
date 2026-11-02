@@ -7,8 +7,8 @@
 ## 1. 四条原则
 
 1. **连贯性靠契约，不靠盯人。** 并行开工前冻结接口。子代理只在契约内写实现，不改契约。
-2. **状态全在文件和 git 里。** 任务图、契约、尝试记录都是文件。新会话读完文件就能接手，不依赖任何 Agent 的记忆。
-3. **能不能合并由脚本判定。** 合并门的退出码说了算，模型说“我测过了”不算数。
+2. **授权与状态留在受保护的 git 记录里。** 任务图、契约和状态变化可追溯；`.orchestrate/attempts.json` 只是本地重试提示，不是防篡改授权状态。
+3. **能不能合并由可信环境中的脚本判定。** 合并门必须读取受保护 base 中的授权；模型说“我测过了”不算数，工作分支自写的授权也不算数。
 4. **总监这一层尽量薄。** 调度和门禁用脚本；只有重排计划和漂移检查需要模型判断。
 
 ## 2. 五步流程
@@ -41,7 +41,7 @@ node scripts/orchestrate/next-tasks.mjs list docs/arch/TASK-GRAPH.yaml       # �
 node scripts/orchestrate/next-tasks.mjs dispatch docs/arch/TASK-GRAPH.yaml T-014 > .orchestrate/T-014.md   # 生成工作包
 ```
 
-调度者（人或主 Agent）做三件事：取任务、生成工作包、把任务状态改为 `doing` 并填 `owner`。`list` 已经排除了和 `doing` 任务写范围冲突的任务，按它的输出派发就不会撞车。
+调度者（人或主 Agent）做三件事：取任务、生成工作包、把任务状态改为 `doing` 并填 `owner`。任务图采用单写者更新，避免多个会话同时改写状态；`list` 对冲突的排除只是派工提示，不能代替写者串行化和 CI 复核。
 
 ### ③ 子代理执行（弱模型也行）
 
@@ -53,13 +53,18 @@ node scripts/orchestrate/next-tasks.mjs dispatch docs/arch/TASK-GRAPH.yaml T-014
 node scripts/orchestrate/merge-gate.mjs T-014 --graph docs/arch/TASK-GRAPH.yaml --base integration
 ```
 
-依次检查：改动文件都在 `write_scope` 内 → 没碰契约目录（除非任务标了 `contract_change: true`）→ `accept` 通过 → 契约测试通过 → 全量测试通过 → lint 通过。
+合并门先从 `git show integration:docs/arch/TASK-GRAPH.yaml` 读取可信授权：
+- 任务必须已在可信基线登记；`req`、`depends_on`、`write_scope`、`accept`、`budget`、`contract_change` 不得被工作分支修改；
+- 顶层 `gate`、`integration_branch`、`contracts_dir` 不得被工作分支修改；
+- `status`、`owner`、`title` 等非授权字段可以由调度者更新。
+随后才检查：改动文件都在可信 `write_scope` 内 → 没碰契约目录（除非可信任务已授权）→ 可信 `accept` 通过 → 契约测试通过 → 全量测试通过 → lint 通过。
 
 - 退出码 0：调度者把分支合进集成分支，任务状态改为 `done`。
-- 退出码 1：把输出原样贴回给子代理重做。尝试次数记在 `.orchestrate/attempts.json`。
-- 退出码 3（第 3 次失败）：任务状态改为 `blocked`，交给人，不再自动重试。
+- 退出码 1：把输出原样贴回给子代理重做。`.orchestrate/attempts.json` 只用于本地重试提示，删除它不等于获得无限重试授权。
+- 退出码 2：用法、任务图位置、可信基线或 attempts 格式错误，先修环境。
+- 退出码 3（达到本地重试提示上限）：任务状态改为 `blocked`，交给人处理。
 
-合并门只判定，不改任务图，也不替你合并。状态由调度者改，这样每一次状态变化都留在 git 记录里。
+合并门只判定，不改任务图，也不替你合并。状态由调度者单写者更新；权威检查必须在可信 CI 使用受保护 base，不能只在执行任务的代理本地自证。
 
 ### ⑤ 漂移检查（每合并约 5 个任务，或每个里程碑一次）
 
@@ -103,7 +108,7 @@ FLOW 的 P1“环境绿”在本流程里要求一条命令起好环境，包括
 ## 7. 和其他文件的关系
 
 - `REQUIREMENTS.md`：任务的 `req` 字段写需求编号；任务合并后在追踪表“任务/PR”列登记。
-- `AGENT-DISPATCH.md`：工作包由 `next-tasks dispatch` 生成，“范围”一段就是 `write_scope`。脚本输出的五段标题是目标/范围/输入/验收/约束，如果 AGENT-DISPATCH 定义的段名不同，以 AGENT-DISPATCH 为准，改脚本里的标题。
+- `AGENT-DISPATCH.md`：`next-tasks dispatch` 只生成编排骨架；目标、精确输入、完整动作、禁止事项和验收的映射以该文件第 10 节为准，派发前由主模型补齐原文片段与明确步骤。
 - `CRAFTS/VERIFY.md`：合并门是 VERIFY 在任务一级的机判版；整体 VERIFY 仍在里程碑结束时做。
 - `CRAFTS/DESIGN.md`：多模块项目的设计产物就是 ARCH-MAP 加接口契约。
 - 脚本限制：任务图解析器只支持受限 YAML 子集，见模板头部说明。

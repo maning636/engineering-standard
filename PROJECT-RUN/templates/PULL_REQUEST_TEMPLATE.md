@@ -1,8 +1,9 @@
 <!--
-# [DORMANT - TEAM MODE]
-# 激活方式：TEAM 模式下复制本文件到 .github/pull_request_template.md（GitHub 会自动加载为 PR 正文骨架）。
-# 单人（SOLO）阶段保留本 DORMANT 注释块，仅作格式参考。
-# 参见 templates/DORMANT-SWITCHES-TEMPLATE.md 第 1 项。
+# [DORMANT - TEAM MODE] — 当前状态：未启用
+# 本模板当前处于休眠状态。SOLO 模式下合入以 CI 硬门与 AGENT-PROTOCOL 红线为准，不使用本模板。
+# TEAM 模式激活时：复制本文件到 .github/pull_request_template.md（GitHub 会自动加载为 PR 正文骨架），删除本 DORMANT 注释块。
+# 参见 templates/DORMANT-SWITCHES-TEMPLATE.md 第 1 项、START-HERE.md「PR 模板状态」。
+# 检查字段：问题描述、验证方式、影响范围、是否触及架构、测试证据、坑清单、文档同步、AI 参与记录、TEAM 人工复核声明。
 -->
 
 ## 1. 改了什么

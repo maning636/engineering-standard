@@ -30,7 +30,7 @@ AGENT.md（项目纪律，若有）→ AGENT-PROTOCOL.md（阶段状态机）→
 
 - 任何标准变更走本库的 PR：改动 → 说明为什么 → 合入
 - 大的原则性变更记录为 ADR（模板在 `PROJECT-RUN/templates/ADR-TEMPLATE.md`）
-- 各项目落地时按需裁剪，但**三支柱与十条红线不可裁**（见 `PROJECT-RUN/AGENT-PROTOCOL.md`）
+- 各项目落地时按需裁剪，但**三支柱与 12 条红线不可裁**（见 `PROJECT-RUN/AGENT-PROTOCOL.md`「全局红线」）
 
 ## 溯源
 

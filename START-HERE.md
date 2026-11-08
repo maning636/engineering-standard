@@ -10,6 +10,7 @@
 ```
 你是执行 Agent。先读本文件，按下方路由表读对应文档，
 再按 PROJECT-RUN/AGENT-PROTOCOL.md 的阶段状态机执行。
+开工前先走三条纪律：排除式路由 → 先查事实再问人 → 每阶段只问一个能改变下一步的问题。
 文档没覆盖的情况写 BLOCKED 等人，禁止自由发挥。
 ```
 
@@ -33,12 +34,14 @@
 
 > 表里没出现的事 = 本库未覆盖 → 在 `PROGRESS.md` 写 `BLOCKED: <问题>`，等人决定。
 
+> **PR 模板状态**：`PROJECT-RUN/templates/PULL_REQUEST_TEMPLATE.md` 当前标注 `[DORMANT - TEAM MODE]`，**未启用**。SOLO 模式下合入以 CI 硬门与协议红线为准；TEAM 模式激活时去掉 DORMANT 注释并复制到 `.github/pull_request_template.md` 即生效。
+
 ---
 
 ## 三份最小必读（10 分钟）
 
 1. **`PROJECT-RUN/FLOW.md`** — P0–P6 一页流程图
-2. **`PROJECT-RUN/AGENT-PROTOCOL.md`** — 各阶段做什么、怎么验证、什么时候算完 + 11 条红线
+2. **`PROJECT-RUN/AGENT-PROTOCOL.md`** — 各阶段做什么、怎么验证、什么时候算完 + 12 条红线
 3. **`PROJECT-RUN/PROGRESS.md`** — 现成台账（复制到项目根，改模式行即开工）
 
 ---
@@ -51,7 +54,7 @@ engineering-standard/
 ├── README.md                  ← 人看的库介绍
 ├── PROJECT-RUN/               ← 执行包：直接拿去做项目
 │   ├── AGENT-BOOTSTRAP.md     新项目完整启动指令（变量表 + 两段式 + 计划模板 + DoD）
-│   ├── AGENT-PROTOCOL.md      P0–P6 阶段机 + 11 条红线
+│   ├── AGENT-PROTOCOL.md      P0–P6 阶段机 + 12 条红线
 │   ├── AGENT-DISPATCH.md      派小模型的提示词规范
 │   ├── DUAL-MODE.md           SOLO/TEAM 双模 + 休眠开关
 │   ├── FLOW.md                一页流程图

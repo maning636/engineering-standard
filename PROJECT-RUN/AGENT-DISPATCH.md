@@ -223,3 +223,44 @@
 ### 自查一句话
 
 看一份工作记录，如果分不清「谁设计了、谁执行了、谁验收了」，说明分工没落实。
+
+
+---
+
+## 通道故障接管协议（v1.1 增补，2026-11-11 标书项目实测）
+
+子代理模型池会出**通道级故障**（API 429、`field MaxTokens invalid`、`inference request is invalid` 等），
+特征是 **resume 后秒挂、无任何输出**。这不是任务问题，是通道问题。
+
+**接管协议**：
+1. 同一子代理 resume 失败 **2 次** → 停止重试，主模型直接接管剩余工作
+2. 接管前先盘点子代理已完成的产出（git status / 文件清单），**不要重做已完成部分**
+3. 通道故障与任务难度无关——不要把失败归因于任务，也不要因此降低任务质量
+
+**预防性派发设计**（减少接管概率）：
+- 多子代理并行时，把「文件不相交」写进各自提示词（避免合并冲突）
+- 每个子代理的提示词自带「已完成则跳过」的幂等语义，接管时零浪费
+
+### 诊断注入手法：让页面自己交代运行时状态
+
+「白屏/不渲染」类前端问题，截图看不出原因时，往 `index.html` 注入诊断 trap：
+
+```html
+<script>
+window.__errs = [];
+window.onerror = function(m, s, l) { window.__errs.push(m + ' @' + l); render(); };
+window.addEventListener('unhandledrejection', function(e) { window.__errs.push('REJECT: ' + e.reason); render(); });
+function render() { document.getElementById('errbox').textContent =
+  'PATH: ' + location.pathname + ' || ERRORS: ' + window.__errs.join(' | ') +
+  ' || ROOT_LEN: ' + document.getElementById('root').innerHTML.length; }
+setInterval(render, 600);
+</script>
+<div id="errbox" style="position:fixed;top:0;z-index:99999;background:#ff0"></div>
+```
+
+**读数解读**（实战案例）：
+- `ROOT_LEN: 4038` + 无报错 + 视觉白屏 → DOM 有内容但不可见 → 后台标签动画冻结（测试假象，非 bug）
+- `ROOT_LEN: 0` + 无报错 → 路由未匹配 → 查 basename 与路径前缀
+- `ROOT_LEN: 0` + 有报错 → 按报错修
+
+⚠️ 本节与上文「主模型临时接管」条目互补：那条讲**何时**接管，本节讲**接管协议**与**诊断工具**。

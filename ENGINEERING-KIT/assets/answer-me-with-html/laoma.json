@@ -1,0 +1,65 @@
+{
+  "label": {
+    "zh": "老马公文",
+    "en": "Laoma Official"
+  },
+  "requires": "0.5.0",
+  "tokens": {
+    "common": {
+      "--radius": "4px",
+      "--font-sans": "\"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\"",
+      "--head-font": "\"Noto Serif SC\", \"Source Han Serif SC\", \"SimSun\", serif"
+    },
+    "light": {
+      "--bg": "#F6F1E9",
+      "--paper": "#FFFCF6",
+      "--ink": "#1F2629",
+      "--ink-2": "#4A5257",
+      "--ink-3": "#6B675E",
+      "--line": "#E6DFD2",
+      "--line-2": "#D8CFC0",
+      "--fill": "#F1EAE0",
+      "--accent": "#C9252D",
+      "--accent-bg": "#FBEAEB",
+      "--ok": "#27713E",
+      "--ok-bg": "#E8F3EC",
+      "--err": "#B3261E",
+      "--err-bg": "#FBEAE9",
+      "--warn": "#8A5F08",
+      "--warn-bg": "#FBF3E2",
+      "--head-bg": "#FFFCF6",
+      "--head-fg": "#1F2629"
+    },
+    "dark": {
+      "--bg": "#16130F",
+      "--paper": "#1F1B16",
+      "--ink": "#F2EDE3",
+      "--ink-2": "#C9C2B4",
+      "--ink-3": "#8F887B",
+      "--line": "#3A342B",
+      "--line-2": "#4A4337",
+      "--fill": "#2A251E",
+      "--accent": "#E5544C",
+      "--accent-bg": "#2E1818",
+      "--ok": "#6FBF87",
+      "--ok-bg": "#1E2E24",
+      "--err": "#E5544C",
+      "--err-bg": "#2A1514",
+      "--warn": "#D9A441",
+      "--warn-bg": "#33290F",
+      "--head-bg": "#1F1B16",
+      "--head-fg": "#F2EDE3"
+    }
+  },
+  "css": "& .am-md strong { font-weight: 700; background: linear-gradient(transparent 62%, var(--accent-bg) 62%); padding: 0 0.1em; } & .am-panel-id { color: var(--accent); } & .am-callout { border-left: 3px solid var(--accent); } & .am-panel-head h2 { font-weight: 700; letter-spacing: 0.01em; } & .am-head h1 { font-weight: 900; } & .am-colophon { font-family: var(--font-sans); letter-spacing: normal; opacity: 0.75; }",
+  "video": {
+    "tokens": {
+      "light": {
+        "--v-stage": "#FFFCF6"
+      },
+      "dark": {
+        "--v-stage": "#1F1B16"
+      }
+    }
+  }
+}

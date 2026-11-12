@@ -4,6 +4,28 @@
 > 基础 skill：[QingYunA/answer-me-with-html](https://github.com/QingYunA/answer-me-with-html)（MIT），
 > 已装入 `C:/Users/Administrator/.agents/skills/answer-me-with-html/`，CLI 随 skill 自带，需 Node.js 20+。
 
+## 0. 新电脑部署（三步，约 5 分钟）
+
+**skill 是本地可执行 CLI，只读本规范渲染不出页面——每台跑 Agent 的电脑都要装一套。**
+
+```bash
+# 1. 确认 Node.js ≥ 20，没有就装：winget install OpenJS.NodeJS.LTS
+node --version
+
+# 2. 安装 skill（任选其一）
+npx skills add QingYunA/answer-me-with-html -g -y
+# 或手动：git clone --depth 1 https://github.com/QingYunA/answer-me-with-html
+# cp -R answer-me-with-html/skills/answer-me-with-html <你的Agent的skills目录>/
+
+# 3. 装 laoma 主题 + 打页头补丁（本仓库自带，见 §7 与 assets/）
+mkdir -p ~/.answer-me-with-html/themes
+cp ENGINEERING-KIT/assets/answer-me-with-html/laoma.json ~/.answer-me-with-html/themes/
+# 然后按 §7 修改 am.mjs 的 colophon() 函数（页头只留日期）
+# 验证：am theme check laoma → 0 errors 0 warnings；渲染测试页看页头只有日期
+```
+
+三步缺一不可：没 skill 没有 CLI；没主题退回蓝图蓝；没补丁页头带品牌行。
+
 ## 1. 主题：用 `laoma`，不用默认 blueprint
 
 自建主题 `~/.answer-me-with-html/themes/laoma.json`（宣纸白 + 墨字 + 印泥红 #C9252D，

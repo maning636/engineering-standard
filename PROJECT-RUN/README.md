@@ -26,6 +26,7 @@
 | `PROGRESS.md` | 现成台账（已按模板实例化，占位符保留） |
 | `DUAL-MODE.md` | 双模工程协议：SOLO/TEAM 切换、休眠开关、模式标记 |
 | `AGENT-DISPATCH.md` | 小模型子智能体派发规范：五段式模板、七种失败对策、验收清单 |
+| `ENV-ISOLATION.md` | **环境隔离红线**：开发/生产永不合并，发布是唯一交汇点（四道闸），违规即事故 |
 | `checklist.md` | 30 项启动检查单 |
 | `templates/ci-template.yml` | 精简版硬门 CI 骨架 → `.github/workflows/ci.yml` |
 | `templates/security-template.yml` | 安全扫描骨架 → `.github/workflows/security.yml` |

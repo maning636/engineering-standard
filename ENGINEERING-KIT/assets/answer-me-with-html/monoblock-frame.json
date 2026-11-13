@@ -1,0 +1,79 @@
+{
+  "label": {
+    "zh": "黑白方块·双线框",
+    "en": "Mono Block Frame"
+  },
+  "requires": "0.5.0",
+  "tokens": {
+    "common": {
+      "--radius": "0px",
+      "--shadow": "none",
+      "--bw": "2px",
+      "--font-sans": "\"Inter\", \"Helvetica Neue\", Arial, \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif",
+      "--head-font": "\"Inter\", \"Helvetica Neue\", Arial, \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    "light": {
+      "--bg": "#F5F5F5",
+      "--paper": "#FFFFFF",
+      "--ink": "#0A0A0A",
+      "--ink-2": "#3D3D3D",
+      "--ink-3": "#6E6E6E",
+      "--line": "#0A0A0A",
+      "--line-2": "#D4D4D4",
+      "--fill": "#EFEFEF",
+      "--accent": "#0A0A0A",
+      "--accent-bg": "#E4E4E4",
+      "--ok": "#0A0A0A",
+      "--ok-bg": "#EFEFEF",
+      "--err": "#0A0A0A",
+      "--err-bg": "#D0D0D0",
+      "--warn": "#6E6E6E",
+      "--warn-bg": "#FAFAFA",
+      "--head-bg": "#0A0A0A",
+      "--head-fg": "#FFFFFF",
+      "--series-1": "#0A0A0A",
+      "--series-2": "#2E2E2E",
+      "--series-3": "#4F4F4F",
+      "--series-4": "#6B6B6B",
+      "--series-5": "#7F7F7F",
+      "--series-6": "#8C8C8C"
+    },
+    "dark": {
+      "--bg": "#000000",
+      "--paper": "#0C0C0C",
+      "--ink": "#FFFFFF",
+      "--ink-2": "#C4C4C4",
+      "--ink-3": "#9A9A9A",
+      "--line": "#FFFFFF",
+      "--line-2": "#333333",
+      "--fill": "#171717",
+      "--accent": "#FFFFFF",
+      "--accent-bg": "#262626",
+      "--ok": "#FFFFFF",
+      "--ok-bg": "#171717",
+      "--err": "#FFFFFF",
+      "--err-bg": "#1C1C1C",
+      "--warn": "#9A9A9A",
+      "--warn-bg": "#111111",
+      "--head-bg": "#FFFFFF",
+      "--head-fg": "#000000",
+      "--series-1": "#FFFFFF",
+      "--series-2": "#CFCFCF",
+      "--series-3": "#AFAFAF",
+      "--series-4": "#969696",
+      "--series-5": "#7E7E7E",
+      "--series-6": "#6E6E6E"
+    }
+  },
+  "css": "& .am-panel { outline: 1px solid var(--line); outline-offset: -6px; } & .am-panel-head { background: var(--head-bg); border-bottom: 0; } & .am-panel-head h2 { color: var(--head-fg); font-weight: 800; letter-spacing: 0.02em; } & .am-panel-id { background: transparent; color: var(--head-fg); border-inline-end: var(--bw) solid color-mix(in srgb, var(--head-fg) 45%, transparent); font-family: var(--font-mono); font-weight: 700; } & .am-panel-meta { color: color-mix(in srgb, var(--head-fg) 68%, transparent); } & .am-md th { background: var(--ink); color: var(--paper); font-weight: 600; letter-spacing: 0.05em; border-bottom: 0; } & .am-md td { border-bottom: 1px solid var(--line-2); } & .am-md strong { background: none; font-weight: 800; box-shadow: inset 0 -0.28em 0 var(--accent-bg); } & .am-callout { border-inline-start-width: 6px; } & .am-callout--ok { border-inline-start-color: var(--ink); } & .am-callout--warn { border-inline-start-color: var(--ink-3); background: repeating-linear-gradient(135deg, var(--paper) 0 7px, var(--fill) 7px 14px); } & .am-callout--err { border-inline-start-width: 10px; box-shadow: inset 0 0 0 1px var(--ink); } & .am-status--ok { color: var(--ink); } & .am-status--warn { color: var(--ink-3); } & .am-status--no { color: var(--ink); } & .am-status--no .am-status-icon { font-weight: 900; } & .am-head h1 { font-weight: 900; letter-spacing: -0.02em; } & .am-colophon { font-family: var(--font-mono); letter-spacing: 0.06em; }",
+  "video": {
+    "tokens": {
+      "light": {
+        "--v-stage": "#FFFFFF"
+      },
+      "dark": {
+        "--v-stage": "#0C0C0C"
+      }
+    }
+  }
+}
